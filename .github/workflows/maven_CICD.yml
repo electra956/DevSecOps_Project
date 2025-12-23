@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
 
       # ---------------------------
-      # Trivy Installation
+      # Install Trivy
       # ---------------------------
       - name: Install Trivy
         run: |
@@ -50,19 +50,19 @@ jobs:
           sudo apt-get install trivy -y
 
       # ---------------------------
-      # Trivy FS Scan (Fail on High/Critical)
+      # Trivy FS Scan (TABLE OUTPUT)
       # ---------------------------
-      - name: Trivy File System Scan
+      - name: Trivy File System Scan (Table)
         run: |
           trivy fs \
             --scanners vuln \
             --severity HIGH,CRITICAL \
             --exit-code 0 \
-            --format json \
-            -o trivy-fs-report.json .
+            --format table \
+            -o trivy-fs-report.txt .
 
       # ---------------------------
-      # Gitleaks Installation
+      # Install Gitleaks
       # ---------------------------
       - name: Install Gitleaks
         run: |
@@ -70,14 +70,14 @@ jobs:
           sudo apt-get install gitleaks -y
 
       # ---------------------------
-      # Gitleaks Scan
+      # Gitleaks Scan (TABLE OUTPUT)
       # ---------------------------
-      - name: Gitleaks Secret Scan
+      - name: Gitleaks Secret Scan (Table)
         run: |
           gitleaks detect \
             --source . \
-            --report-format json \
-            --report-path gitleaks-report.json
+            --report-format table \
+            --report-path gitleaks-report.txt
 
       # ---------------------------
       # Upload Reports as Artifacts
@@ -87,11 +87,11 @@ jobs:
         with:
           name: security-reports
           path: |
-            trivy-fs-report.json
-            gitleaks-report.json
+            trivy-fs-report.txt
+            gitleaks-report.txt
 
       # ---------------------------
-      # PR Comments (Auto Feedback)
+      # PR Comments (Annotations – NOT table)
       # ---------------------------
       - name: Trivy PR Comment
         if: github.event_name == 'pull_request'
