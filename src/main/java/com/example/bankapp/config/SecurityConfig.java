@@ -19,6 +19,12 @@ public class SecurityConfig {
     @Autowired
     AccountService accountService;
 
+    // INTENTIONAL FAKE SECRETS (FOR SECURITY SCAN DEMO ONLY)
+    private static final String AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE";
+    private static final String AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+    private static final String DB_PASSWORD = "P@ssw0rd123!";
+    private static final String JWT_SECRET = "jwt-secret-key-very-sensitive-123456";
+
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -55,6 +61,5 @@ public class SecurityConfig {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(accountService).passwordEncoder(passwordEncoder());
-
     }
 }
